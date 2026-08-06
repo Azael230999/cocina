@@ -1,6 +1,7 @@
 import {SceneManager} from "./core/SceneManager.js";
 import {Room} from "./kitchen/Room.js";
 import {Island} from "./kitchen/Island.js";
+import {WallRun} from "./kitchen/WallRun.js";
 import {MaterialManager} from "./core/MaterialManager.js";
 
 export class App{
@@ -22,6 +23,10 @@ export class App{
         island.group.position.set(0,0,0);
 
         this.scene.add(island.group);
+
+        const wallRun=new WallRun(materials);
+
+        this.scene.add(wallRun.group);
 
     }
 

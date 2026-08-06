@@ -27,11 +27,11 @@ export class SceneManager {
 
         this.camera.position.set(
 
-            6,
+            2.6,
 
-            5,
+            1.75,
 
-            6
+            1.6
 
         );
 
@@ -83,11 +83,11 @@ export class SceneManager {
 
         this.controls.target.set(
 
-            2.4,
+            -0.4,
 
-            1,
+            1.1,
 
-            2
+            -1.2
 
         );
 
