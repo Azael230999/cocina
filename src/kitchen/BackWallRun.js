@@ -5,6 +5,7 @@ import {WallCabinet} from "./WallCabinet.js";
 import {Cooktop} from "./Cooktop.js";
 import {RangeHood} from "./RangeHood.js";
 import {Door} from "./Door.js";
+import {Refrigerator} from "./Refrigerator.js";
 
 export class BackWallRun{
 
@@ -14,13 +15,23 @@ export class BackWallRun{
 
         this.materials=materials;
 
-        this.runLength=options.runLength??3.65;
-
         this.wallThickness=options.wallThickness??.15;
 
         this.cabinetDepth=.65;
 
-        this.doorClearance=.20;
+        this.doorCenterX=4.105;
+
+        this.doorWidth=.90;
+
+        this.fridgeWidth=.75;
+
+        this.fridgeGap=.05;
+
+        const doorLeftEdge=this.doorCenterX-this.doorWidth/2;
+
+        this.fridgeZStart=doorLeftEdge-this.fridgeGap-this.fridgeWidth;
+
+        this.cabinetRunLength=this.fridgeZStart-this.fridgeGap;
 
         this.build();
 
@@ -36,17 +47,17 @@ export class BackWallRun{
 
         this.buildFlankingCabinets();
 
+        this.buildRefrigerator();
+
         this.buildDoor();
 
     }
 
     buildCabinets(){
 
-        const slots=5;
+        const slots=4;
 
-        const cabinetRunLength=this.runLength-this.doorClearance;
-
-        const slot=cabinetRunLength/slots;
+        const slot=this.cabinetRunLength/slots;
 
         const z=this.wallThickness/2+this.cabinetDepth/2;
 
@@ -84,7 +95,7 @@ export class BackWallRun{
 
         cooktop.group.position.set(
 
-            this.runLength/2,
+            this.cabinetRunLength/2,
 
             .965,
 
@@ -102,7 +113,7 @@ export class BackWallRun{
 
         hood.group.position.set(
 
-            this.runLength/2,
+            this.cabinetRunLength/2,
 
             1.70,
 
@@ -154,9 +165,27 @@ export class BackWallRun{
 
         );
 
-        right.group.position.set(this.runLength-.425,1.825,z);
+        right.group.position.set(this.cabinetRunLength-.425,1.825,z);
 
         this.group.add(right.group);
+
+    }
+
+    buildRefrigerator(){
+
+        const fridge=new Refrigerator(this.materials);
+
+        fridge.group.position.set(
+
+            this.fridgeZStart+this.fridgeWidth/2,
+
+            0,
+
+            this.wallThickness/2+fridge.depth/2
+
+        );
+
+        this.group.add(fridge.group);
 
     }
 
@@ -166,7 +195,7 @@ export class BackWallRun{
 
         door.group.position.set(
 
-            4.105,
+            this.doorCenterX,
 
             0,
 

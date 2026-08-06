@@ -4,7 +4,6 @@ import {BaseCabinet} from "./BaseCabinet.js";
 import {WallCabinet} from "./WallCabinet.js";
 import {Sink} from "./Sink.js";
 import {Faucet} from "./Faucet.js";
-import {Refrigerator} from "./Refrigerator.js";
 
 export class RightWallRun{
 
@@ -22,11 +21,7 @@ export class RightWallRun{
 
         this.cabinetDepth=.62;
 
-        this.doorClearance=options.doorClearance??.35;
-
-        this.fridgeWidth=.75;
-
-        this.cabinetZStart=this.doorClearance+this.fridgeWidth+.05;
+        this.cabinetZStart=options.doorClearance??.20;
 
         this.cabinetZEnd=3.10;
 
@@ -35,8 +30,6 @@ export class RightWallRun{
     }
 
     build(){
-
-        this.buildRefrigerator();
 
         this.buildCabinets();
 
@@ -48,23 +41,9 @@ export class RightWallRun{
 
     }
 
-    buildRefrigerator(){
-
-        const fridge=new Refrigerator(this.materials);
-
-        const x=this.roomWidth-this.wallThickness/2-fridge.depth/2;
-
-        fridge.group.position.set(x,0,this.doorClearance+this.fridgeWidth/2);
-
-        fridge.group.rotation.y=-Math.PI/2;
-
-        this.group.add(fridge.group);
-
-    }
-
     buildCabinets(){
 
-        const slots=3;
+        const slots=4;
 
         const length=this.cabinetZEnd-this.cabinetZStart;
 
@@ -126,7 +105,7 @@ export class RightWallRun{
 
     buildUpperCabinets(){
 
-        const slots=3;
+        const slots=4;
 
         const start=this.cabinetZStart;
 
