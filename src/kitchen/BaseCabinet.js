@@ -1,5 +1,6 @@
 import * as THREE from "three";
 
+import {Carcass} from "./Carcass.js";
 import {Countertop} from "./Countertop.js";
 import {DrawerFront} from "./DrawerFront.js";
 import {GolaHandle} from "./GolaHandle.js";
@@ -42,85 +43,23 @@ export class BaseCabinet{
 
     buildCarcass(){
 
-        const t=this.panelThickness;
+        const carcass=new Carcass(
 
-        const material=this.materials.get("whiteOak");
+            this.materials.get("whiteOak"),
 
-        const carcass=new THREE.Group();
+            this.width,
 
-        carcass.name="carcass";
+            this.height,
 
-        const left=new THREE.Mesh(
+            this.depth,
 
-            new THREE.BoxGeometry(t,this.height,this.depth),
-
-            material
+            this.panelThickness
 
         );
 
-        left.name="panelLeft";
+        carcass.group.name="carcass";
 
-        left.position.set(-this.width/2+t/2,this.height/2,0);
-
-        left.castShadow=true;
-
-        left.receiveShadow=true;
-
-        carcass.add(left);
-
-        const right=left.clone();
-
-        right.name="panelRight";
-
-        right.position.x=this.width/2-t/2;
-
-        carcass.add(right);
-
-        const top=new THREE.Mesh(
-
-            new THREE.BoxGeometry(this.width-2*t,t,this.depth),
-
-            material
-
-        );
-
-        top.name="panelTop";
-
-        top.position.set(0,this.height-t/2,0);
-
-        top.castShadow=true;
-
-        top.receiveShadow=true;
-
-        carcass.add(top);
-
-        const bottom=top.clone();
-
-        bottom.name="panelBottom";
-
-        bottom.position.y=t/2;
-
-        carcass.add(bottom);
-
-        const back=new THREE.Mesh(
-
-            new THREE.BoxGeometry(this.width-2*t,this.height-2*t,t),
-
-            material
-
-        );
-
-        back.name="panelBack";
-
-        back.position.set(0,this.height/2,-this.depth/2+t/2);
-
-        back.castShadow=true;
-
-        back.receiveShadow=true;
-
-        carcass.add(back);
-
-        this.group.add(carcass);
+        this.group.add(carcass.group);
 
     }
 

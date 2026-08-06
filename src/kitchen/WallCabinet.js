@@ -1,5 +1,8 @@
 import * as THREE from "three";
 
+import {Carcass} from "./Carcass.js";
+import {GolaHandle} from "./GolaHandle.js";
+
 export class WallCabinet{
 
     constructor(materials,options={}){
@@ -24,31 +27,31 @@ export class WallCabinet{
 
         this.buildDoors();
 
+        this.buildGolaHandle();
+
     }
 
     buildBody(){
 
-        const mesh=new THREE.Mesh(
+        const carcass=new Carcass(
 
-            new THREE.BoxGeometry(
+            this.materials.get("whiteOak"),
 
-                this.width,
+            this.width,
 
-                this.height,
+            this.height,
 
-                this.depth
+            this.depth,
 
-            ),
-
-            this.materials.get("whiteOak")
+            .02
 
         );
 
-        mesh.castShadow=true;
+        carcass.group.name="carcass";
 
-        mesh.receiveShadow=true;
+        carcass.group.position.y=-this.height/2;
 
-        this.group.add(mesh);
+        this.group.add(carcass.group);
 
     }
 
@@ -91,6 +94,26 @@ export class WallCabinet{
             this.group.add(door);
 
         }
+
+    }
+
+    buildGolaHandle(){
+
+        const handle=new GolaHandle(this.width-.08);
+
+        handle.mesh.name="golaHandle";
+
+        handle.mesh.position.set(
+
+            0,
+
+            -this.height/2+.03,
+
+            this.depth/2+.03
+
+        );
+
+        this.group.add(handle.mesh);
 
     }
 
