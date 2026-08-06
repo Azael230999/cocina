@@ -7,6 +7,7 @@ import {Door} from "./kitchen/Door.js";
 import {Sink} from "./kitchen/Sink.js";
 import {Faucet} from "./kitchen/Faucet.js";
 import {Cooktop} from "./kitchen/Cooktop.js";
+import {PendantLight} from "./kitchen/PendantLight.js";
 import {MaterialManager} from "./core/MaterialManager.js";
 
 export class App{
@@ -64,6 +65,12 @@ export class App{
         cooktop.group.position.set(0,0.965,0);
 
         this.scene.add(cooktop.group);
+
+        const pendant=new PendantLight();
+
+        pendant.group.position.set(0,2.4,0);
+
+        this.scene.add(pendant.group);
 
         this.bindViewButtons();
 

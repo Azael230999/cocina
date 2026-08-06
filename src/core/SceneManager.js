@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 
 export class SceneManager {
 
@@ -102,6 +103,18 @@ export class SceneManager {
             35
 
         );
+
+        const pmrem = new THREE.PMREMGenerator(this.renderer);
+
+        this.scene.environment = pmrem.fromScene(
+
+            new RoomEnvironment(),
+
+            0.04
+
+        ).texture;
+
+        pmrem.dispose();
 
     }
 
