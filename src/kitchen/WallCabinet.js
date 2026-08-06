@@ -76,6 +76,8 @@ export class WallCabinet{
 
             );
 
+            door.name=i===0?"doorLeft":"doorRight";
+
             door.position.set(
 
                 sign*(doorWidth/2+.0075),

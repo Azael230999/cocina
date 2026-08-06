@@ -70,4 +70,52 @@ export class MaterialManager{
 
     }
 
+    register(config){
+
+        const material=new THREE.MeshPhysicalMaterial({
+
+            roughness:.7
+
+        });
+
+        material.name=config.name??config.id;
+
+        if(config.baseColor||config.normal||config.roughness||config.ao){
+
+            const loader=new THREE.TextureLoader();
+
+            if(config.baseColor){
+
+                material.map=loader.load(config.baseColor);
+
+                material.map.colorSpace=THREE.SRGBColorSpace;
+
+            }
+
+            if(config.normal){
+
+                material.normalMap=loader.load(config.normal);
+
+            }
+
+            if(config.roughness){
+
+                material.roughnessMap=loader.load(config.roughness);
+
+            }
+
+            if(config.ao){
+
+                material.aoMap=loader.load(config.ao);
+
+            }
+
+        }
+
+        this.materials[config.id]=material;
+
+        return material;
+
+    }
+
 }

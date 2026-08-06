@@ -1,5 +1,9 @@
 import * as THREE from "three";
 
+import {Countertop} from "./Countertop.js";
+import {DrawerFront} from "./DrawerFront.js";
+import {GolaHandle} from "./GolaHandle.js";
+
 export class BaseCabinet{
 
     constructor(materials,options={}){
@@ -16,79 +20,133 @@ export class BaseCabinet{
 
         this.drawers=options.drawers??3;
 
+        this.panelThickness=.02;
+
         this.build();
 
     }
 
     build(){
 
-        this.buildBody();
+        this.buildCarcass();
 
-        this.buildCounter();
+        this.buildCountertop();
 
         this.buildToeKick();
 
-        this.buildDrawers();
+        this.buildDrawerFronts();
+
+        this.buildGolaHandle();
 
     }
 
-    buildBody(){
+    buildCarcass(){
 
-        const mesh=new THREE.Mesh(
+        const t=this.panelThickness;
 
-            new THREE.BoxGeometry(
+        const material=this.materials.get("whiteOak");
 
-                this.width,
+        const carcass=new THREE.Group();
 
-                this.height,
+        carcass.name="carcass";
 
-                this.depth
+        const left=new THREE.Mesh(
 
-            ),
+            new THREE.BoxGeometry(t,this.height,this.depth),
 
-            this.materials.get("whiteOak")
+            material
 
         );
 
-        mesh.position.y=this.height/2;
+        left.name="panelLeft";
 
-        mesh.castShadow=true;
+        left.position.set(-this.width/2+t/2,this.height/2,0);
 
-        mesh.receiveShadow=true;
+        left.castShadow=true;
 
-        this.group.add(mesh);
+        left.receiveShadow=true;
 
-    }
+        carcass.add(left);
 
-    buildCounter(){
+        const right=left.clone();
+
+        right.name="panelRight";
+
+        right.position.x=this.width/2-t/2;
+
+        carcass.add(right);
 
         const top=new THREE.Mesh(
 
-            new THREE.BoxGeometry(
+            new THREE.BoxGeometry(this.width-2*t,t,this.depth),
 
-                this.width+.04,
-
-                .03,
-
-                this.depth+.04
-
-            ),
-
-            this.materials.get("calacatta")
+            material
 
         );
 
-        top.position.y=this.height+.015;
+        top.name="panelTop";
+
+        top.position.set(0,this.height-t/2,0);
 
         top.castShadow=true;
 
-        this.group.add(top);
+        top.receiveShadow=true;
+
+        carcass.add(top);
+
+        const bottom=top.clone();
+
+        bottom.name="panelBottom";
+
+        bottom.position.y=t/2;
+
+        carcass.add(bottom);
+
+        const back=new THREE.Mesh(
+
+            new THREE.BoxGeometry(this.width-2*t,this.height-2*t,t),
+
+            material
+
+        );
+
+        back.name="panelBack";
+
+        back.position.set(0,this.height/2,-this.depth/2+t/2);
+
+        back.castShadow=true;
+
+        back.receiveShadow=true;
+
+        carcass.add(back);
+
+        this.group.add(carcass);
+
+    }
+
+    buildCountertop(){
+
+        const countertop=new Countertop(
+
+            this.materials.get("calacatta"),
+
+            this.width+.04,
+
+            this.depth+.04
+
+        );
+
+        countertop.mesh.name="countertop";
+
+        countertop.mesh.position.y=this.height+.015;
+
+        this.group.add(countertop.mesh);
 
     }
 
     buildToeKick(){
 
-        const toe=new THREE.Mesh(
+        const toeKick=new THREE.Mesh(
 
             new THREE.BoxGeometry(
 
@@ -104,35 +162,33 @@ export class BaseCabinet{
 
         );
 
-        toe.position.y=.05;
+        toeKick.name="toeKick";
 
-        this.group.add(toe);
+        toeKick.position.y=.05;
+
+        this.group.add(toeKick);
 
     }
 
-    buildDrawers(){
+    buildDrawerFronts(){
 
         const h=(this.height-.18)/this.drawers;
 
         for(let i=0;i<this.drawers;i++){
 
-            const front=new THREE.Mesh(
+            const drawerFront=new DrawerFront(
 
-                new THREE.BoxGeometry(
+                this.materials.get("whiteOak"),
 
-                    this.width-.03,
+                this.width-.03,
 
-                    h-.02,
-
-                    .02
-
-                ),
-
-                this.materials.get("whiteOak")
+                h-.02
 
             );
 
-            front.position.set(
+            drawerFront.mesh.name=`drawer0${i+1}`;
+
+            drawerFront.mesh.position.set(
 
                 0,
 
@@ -142,9 +198,33 @@ export class BaseCabinet{
 
             );
 
-            this.group.add(front);
+            this.group.add(drawerFront.mesh);
 
         }
+
+    }
+
+    buildGolaHandle(){
+
+        const h=(this.height-.18)/this.drawers;
+
+        const topDrawerCenterY=.12+h/2+(this.drawers-1)*h;
+
+        const handle=new GolaHandle(this.width-.08);
+
+        handle.mesh.name="golaHandle";
+
+        handle.mesh.position.set(
+
+            0,
+
+            topDrawerCenterY+h/2-.03,
+
+            this.depth/2+.03
+
+        );
+
+        this.group.add(handle.mesh);
 
     }
 
