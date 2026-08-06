@@ -8,6 +8,9 @@ import {Sink} from "./kitchen/Sink.js";
 import {Faucet} from "./kitchen/Faucet.js";
 import {Cooktop} from "./kitchen/Cooktop.js";
 import {PendantLight} from "./kitchen/PendantLight.js";
+import {Refrigerator} from "./kitchen/Refrigerator.js";
+import {OvenTower} from "./kitchen/OvenTower.js";
+import {RangeHood} from "./kitchen/RangeHood.js";
 import {MaterialManager} from "./core/MaterialManager.js";
 
 export class App{
@@ -68,9 +71,31 @@ export class App{
 
         const pendant=new PendantLight();
 
-        pendant.group.position.set(0,2.4,0);
+        pendant.group.position.set(-0.5,2.4,0.15);
 
         this.scene.add(pendant.group);
+
+        const fridge=new Refrigerator(materials);
+
+        fridge.group.position.set(2.05,0,0.0);
+
+        fridge.group.rotation.y=-Math.PI/2;
+
+        this.scene.add(fridge.group);
+
+        const ovenTower=new OvenTower(materials);
+
+        ovenTower.group.position.set(2.10,0,0.675);
+
+        ovenTower.group.rotation.y=-Math.PI/2;
+
+        this.scene.add(ovenTower.group);
+
+        const hood=new RangeHood();
+
+        hood.group.position.set(0,1.70,0);
+
+        this.scene.add(hood.group);
 
         this.bindViewButtons();
 
