@@ -16,7 +16,7 @@ export class RightWallRun{
 
         this.roomWidth=options.roomWidth??4.95;
 
-        this.runLength=options.runLength??3.10;
+        this.roomDepth=options.roomDepth??4.00;
 
         this.wallThickness=options.wallThickness??.15;
 
@@ -24,11 +24,19 @@ export class RightWallRun{
 
         this.doorClearance=options.doorClearance??.35;
 
+        this.fridgeWidth=.75;
+
+        this.cabinetZStart=this.doorClearance+this.fridgeWidth+.05;
+
+        this.cabinetZEnd=3.10;
+
         this.build();
 
     }
 
     build(){
+
+        this.buildRefrigerator();
 
         this.buildCabinets();
 
@@ -36,15 +44,29 @@ export class RightWallRun{
 
         this.buildUpperCabinets();
 
-        this.buildRefrigerator();
+        this.buildExtraPantry();
+
+    }
+
+    buildRefrigerator(){
+
+        const fridge=new Refrigerator(this.materials);
+
+        const x=this.roomWidth-this.wallThickness/2-fridge.depth/2;
+
+        fridge.group.position.set(x,0,this.doorClearance+this.fridgeWidth/2);
+
+        fridge.group.rotation.y=-Math.PI/2;
+
+        this.group.add(fridge.group);
 
     }
 
     buildCabinets(){
 
-        const slots=4;
+        const slots=3;
 
-        const length=this.runLength-this.doorClearance;
+        const length=this.cabinetZEnd-this.cabinetZStart;
 
         const slot=length/slots;
 
@@ -68,7 +90,7 @@ export class RightWallRun{
 
             );
 
-            const z=this.doorClearance+slot/2+i*slot;
+            const z=this.cabinetZStart+slot/2+i*slot;
 
             cabinet.group.position.set(x,0,z);
 
@@ -104,11 +126,11 @@ export class RightWallRun{
 
     buildUpperCabinets(){
 
-        const slots=4;
+        const slots=3;
 
-        const start=this.doorClearance;
+        const start=this.cabinetZStart;
 
-        const length=this.runLength-this.doorClearance-.10;
+        const length=this.cabinetZEnd-this.cabinetZStart-.10;
 
         const slot=length/slots;
 
@@ -142,17 +164,83 @@ export class RightWallRun{
 
     }
 
-    buildRefrigerator(){
+    buildExtraPantry(){
 
-        const fridge=new Refrigerator(this.materials);
+        const shelfDepth=.34;
 
-        const x=this.roomWidth-this.wallThickness/2-fridge.depth/2;
+        const length=this.roomDepth-this.cabinetZEnd-.05;
 
-        fridge.group.position.set(x,0,this.runLength+.40);
+        const material=this.materials.get("walnut");
 
-        fridge.group.rotation.y=-Math.PI/2;
+        const x=this.roomWidth-this.wallThickness/2-shelfDepth/2;
 
-        this.group.add(fridge.group);
+        const shelfYs=[.35,.70,1.05,1.40,1.75,2.10];
+
+        for(const y of shelfYs){
+
+            const shelf=new THREE.Mesh(
+
+                new THREE.BoxGeometry(shelfDepth,.03,length),
+
+                material
+
+            );
+
+            shelf.position.set(x,y,this.cabinetZEnd+length/2);
+
+            shelf.castShadow=true;
+
+            shelf.receiveShadow=true;
+
+            this.group.add(shelf);
+
+        }
+
+        this.buildExtraPantryDecor(x,length);
+
+    }
+
+    buildExtraPantryDecor(x,length){
+
+        const material=new THREE.MeshPhysicalMaterial({
+
+            color:"#e9e4d6",
+
+            roughness:.3,
+
+            transparent:true,
+
+            opacity:.75
+
+        });
+
+        for(const y of [.40,1.10,1.80]){
+
+            for(let j=0;j<2;j++){
+
+                const jar=new THREE.Mesh(
+
+                    new THREE.BoxGeometry(.08,.16,.08),
+
+                    material
+
+                );
+
+                jar.position.set(
+
+                    x,
+
+                    y+.10,
+
+                    this.cabinetZEnd+.15+j*.35
+
+                );
+
+                this.group.add(jar);
+
+            }
+
+        }
 
     }
 
