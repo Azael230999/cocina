@@ -74,6 +74,12 @@ export class SceneManager {
 
         this.controls.dampingFactor = .05;
 
+        this.controls.minDistance = 0.5;
+
+        this.controls.maxDistance = 16;
+
+        this.controls.maxPolarAngle = Math.PI/2 - 0.03;
+
         this.setView("iso");
 
         this.createEnvironment();
@@ -269,6 +275,12 @@ export class SceneManager {
         const dt = this.clock.getDelta();
 
         this.controls.update(dt);
+
+        if(this.camera.position.y<0.05){
+
+            this.camera.position.y=0.05;
+
+        }
 
         this.renderer.render(
 
