@@ -84,6 +84,8 @@ export class Island{
 
         countertop.castShadow=true;
 
+        countertop.userData.isSurface=true;
+
         this.group.add(countertop);
 
     }

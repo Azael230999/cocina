@@ -74,6 +74,8 @@ export class Plant{
 
         this.group.userData.selectable=true;
 
+        this.group.userData.movable=true;
+
         this.group.userData.kind="prop";
 
         this.group.userData.label="Planta";

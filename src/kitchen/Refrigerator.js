@@ -18,6 +18,8 @@ export class Refrigerator{
 
         this.group.userData.selectable=true;
 
+        this.group.userData.movable=true;
+
         this.group.userData.kind="appliance";
 
         this.group.userData.label="Refrigerador";

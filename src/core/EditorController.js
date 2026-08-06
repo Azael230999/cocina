@@ -20,6 +20,8 @@ export class EditorController{
 
         this.placementLabel=null;
 
+        this.moveArmed=false;
+
         this.downPos=null;
 
         this.panel=document.getElementById("editor-panel");
@@ -68,6 +70,8 @@ export class EditorController{
 
                 this.cancelPlacement();
 
+                this.cancelMove();
+
             }
 
         });
@@ -91,6 +95,14 @@ export class EditorController{
         if(this.placementFactory){
 
             this.tryPlace();
+
+            return;
+
+        }
+
+        if(this.moveArmed){
+
+            this.tryMove();
 
             return;
 
@@ -135,6 +147,16 @@ export class EditorController{
         }
 
         return null;
+
+    }
+
+    findSurfaceHit(){
+
+        this.raycaster.setFromCamera(this.pointer,this.sceneManager.camera);
+
+        const hits=this.raycaster.intersectObjects(this.sceneManager.scene.children,true);
+
+        return hits.find(hit=>hit.object.userData&&hit.object.userData.isSurface);
 
     }
 
@@ -230,15 +252,27 @@ export class EditorController{
 
     }
 
+    rotateSelected(){
+
+        if(this.selected){
+
+            this.selected.rotation.y+=Math.PI/2;
+
+        }
+
+    }
+
     armPlacement(factory,label){
 
         this.deselect();
+
+        this.cancelMove();
 
         this.placementFactory=factory;
 
         this.placementLabel=label;
 
-        this.hint.textContent=`Haz clic en el piso para colocar: ${label} (Esc para cancelar)`;
+        this.hint.textContent=`Haz clic en el piso o una cubierta para colocar: ${label} (Esc para cancelar)`;
 
         this.hint.style.display="block";
 
@@ -250,29 +284,77 @@ export class EditorController{
 
         this.placementLabel=null;
 
-        this.hint.style.display="none";
+        if(!this.moveArmed){
+
+            this.hint.style.display="none";
+
+        }
+
+    }
+
+    armMove(){
+
+        if(!this.selected){
+
+            return;
+
+        }
+
+        this.cancelPlacement();
+
+        this.moveArmed=true;
+
+        this.hint.textContent=`Haz clic en el piso o una cubierta para mover: ${this.selected.userData.label||"objeto"} (Esc para cancelar)`;
+
+        this.hint.style.display="block";
+
+    }
+
+    cancelMove(){
+
+        this.moveArmed=false;
+
+        if(!this.placementFactory){
+
+            this.hint.style.display="none";
+
+        }
 
     }
 
     tryPlace(){
 
-        this.raycaster.setFromCamera(this.pointer,this.sceneManager.camera);
+        const hit=this.findSurfaceHit();
 
-        const hits=this.raycaster.intersectObject(this.room.floorMesh,false);
-
-        if(hits.length>0){
-
-            const point=hits[0].point;
+        if(hit){
 
             const instance=this.placementFactory();
 
-            instance.group.position.set(point.x,0,point.z);
+            instance.group.position.copy(hit.point);
 
             this.sceneManager.add(instance.group);
 
             this.cancelPlacement();
 
             this.select(instance.group);
+
+        }
+
+    }
+
+    tryMove(){
+
+        const hit=this.findSurfaceHit();
+
+        if(hit&&this.selected){
+
+            this.selected.position.x=hit.point.x;
+
+            this.selected.position.z=hit.point.z;
+
+            this.cancelMove();
+
+            this.updatePanel();
 
         }
 
@@ -313,6 +395,26 @@ export class EditorController{
             cycleBtn.addEventListener("click",()=>this.cycleDrawers());
 
             actions.appendChild(cycleBtn);
+
+        }
+
+        if(this.selected.userData.movable){
+
+            const moveBtn=document.createElement("button");
+
+            moveBtn.textContent="Mover";
+
+            moveBtn.addEventListener("click",()=>this.armMove());
+
+            actions.appendChild(moveBtn);
+
+            const rotateBtn=document.createElement("button");
+
+            rotateBtn.textContent="Rotar";
+
+            rotateBtn.addEventListener("click",()=>this.rotateSelected());
+
+            actions.appendChild(rotateBtn);
 
         }
 

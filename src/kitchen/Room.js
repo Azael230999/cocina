@@ -50,6 +50,8 @@ export class Room{
 
         this.floorMesh.receiveShadow = true;
 
+        this.floorMesh.userData.isSurface = true;
+
         this.group.add(this.floorMesh);
 
     }

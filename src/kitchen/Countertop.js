@@ -19,6 +19,8 @@ export class Countertop {
         this.mesh.castShadow = true;
         this.mesh.receiveShadow = true;
 
+        this.mesh.userData.isSurface = true;
+
     }
 
 }
