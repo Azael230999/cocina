@@ -15,10 +15,36 @@
         width: 100vw;
         height: 100vh;
       }
+      #view-toolbar {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        display: flex;
+        gap: 8px;
+        font-family: sans-serif;
+        z-index: 10;
+      }
+      #view-toolbar button {
+        padding: 6px 14px;
+        border: none;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.85);
+        cursor: pointer;
+        font-size: 14px;
+      }
+      #view-toolbar button:hover {
+        background: #fff;
+      }
     </style>
   </head>
   <body>
     <div id="viewport"></div>
+    <div id="view-toolbar">
+      <button data-view="kitchen">Cocina</button>
+      <button data-view="iso">Isométrica</button>
+      <button data-view="front">Frente</button>
+      <button data-view="top">Planta</button>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

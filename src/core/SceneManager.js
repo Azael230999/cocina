@@ -25,16 +25,6 @@ export class SceneManager {
 
         );
 
-        this.camera.position.set(
-
-            2.6,
-
-            1.75,
-
-            1.6
-
-        );
-
         this.renderer = new THREE.WebGLRenderer({
 
             antialias:true,
@@ -81,15 +71,7 @@ export class SceneManager {
 
         this.controls.dampingFactor = .05;
 
-        this.controls.target.set(
-
-            -0.4,
-
-            1.1,
-
-            -1.2
-
-        );
+        this.setView("kitchen");
 
         this.createEnvironment();
 
@@ -190,6 +172,48 @@ export class SceneManager {
         grid.position.y = .001;
 
         this.scene.add(grid);
+
+    }
+
+    setView(name){
+
+        switch(name){
+
+            case "iso":
+
+                this.camera.position.set(6,5,6);
+
+                break;
+
+            case "top":
+
+                this.camera.position.set(0,10,0.001);
+
+                break;
+
+            case "front":
+
+                this.camera.position.set(0,1.7,7);
+
+                break;
+
+            case "kitchen":
+
+                this.camera.position.set(2.0,1.7,1.6);
+
+                break;
+
+        }
+
+        this.controls.target.set(
+
+            0,
+
+            1,
+
+            0
+
+        );
 
     }
 
