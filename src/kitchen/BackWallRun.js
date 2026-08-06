@@ -20,6 +20,8 @@ export class BackWallRun{
 
         this.cabinetDepth=.65;
 
+        this.doorClearance=.20;
+
         this.build();
 
     }
@@ -42,7 +44,9 @@ export class BackWallRun{
 
         const slots=5;
 
-        const slot=this.runLength/slots;
+        const cabinetRunLength=this.runLength-this.doorClearance;
+
+        const slot=cabinetRunLength/slots;
 
         const z=this.wallThickness/2+this.cabinetDepth/2;
 

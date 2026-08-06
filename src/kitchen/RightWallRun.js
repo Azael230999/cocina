@@ -22,6 +22,8 @@ export class RightWallRun{
 
         this.cabinetDepth=.62;
 
+        this.doorClearance=options.doorClearance??.35;
+
         this.build();
 
     }
@@ -42,7 +44,9 @@ export class RightWallRun{
 
         const slots=4;
 
-        const slot=this.runLength/slots;
+        const length=this.runLength-this.doorClearance;
+
+        const slot=length/slots;
 
         const x=this.roomWidth-this.wallThickness/2-this.cabinetDepth/2;
 
@@ -64,7 +68,7 @@ export class RightWallRun{
 
             );
 
-            const z=slot/2+i*slot;
+            const z=this.doorClearance+slot/2+i*slot;
 
             cabinet.group.position.set(x,0,z);
 
@@ -102,9 +106,9 @@ export class RightWallRun{
 
         const slots=4;
 
-        const start=.10;
+        const start=this.doorClearance;
 
-        const length=this.runLength-.20;
+        const length=this.runLength-this.doorClearance-.10;
 
         const slot=length/slots;
 
