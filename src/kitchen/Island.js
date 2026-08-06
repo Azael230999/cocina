@@ -4,11 +4,15 @@ import {BaseCabinet} from "./BaseCabinet.js";
 
 export class Island{
 
-    constructor(materials){
+    constructor(materials,options={}){
 
         this.group=new THREE.Group();
 
         this.materials=materials;
+
+        this.width=options.width??1.60;
+
+        this.depth=options.depth??1.00;
 
         this.build();
 
@@ -16,13 +20,19 @@ export class Island{
 
     build(){
 
+        const cabinetWidth=this.width/2-.01;
+
+        const cabinetDepth=this.depth-.05;
+
         const left=new BaseCabinet(
 
             this.materials,
 
             {
 
-                width:.75,
+                width:cabinetWidth,
+
+                depth:cabinetDepth,
 
                 drawers:3
 
@@ -30,7 +40,7 @@ export class Island{
 
         );
 
-        left.group.position.x=-0.375;
+        left.group.position.x=-(cabinetWidth/2+.005);
 
         this.group.add(left.group);
 
@@ -40,7 +50,9 @@ export class Island{
 
             {
 
-                width:.75,
+                width:cabinetWidth,
+
+                depth:cabinetDepth,
 
                 drawers:3
 
@@ -48,7 +60,7 @@ export class Island{
 
         );
 
-        right.group.position.x=.375;
+        right.group.position.x=cabinetWidth/2+.005;
 
         this.group.add(right.group);
 
@@ -56,11 +68,11 @@ export class Island{
 
             new THREE.BoxGeometry(
 
-                1.60,
+                this.width,
 
                 .05,
 
-                1.00
+                this.depth
 
             ),
 

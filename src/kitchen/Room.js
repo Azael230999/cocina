@@ -18,13 +18,11 @@ export class Room{
 
         this.buildCeiling();
 
-        this.buildNorthWall();
+        this.buildBackWall();
 
-        this.buildSouthWall();
+        this.buildLeftWall();
 
-        this.buildEastWall();
-
-        this.buildWestWall();
+        this.buildRightWall();
 
         this.buildBaseboards();
 
@@ -53,6 +51,8 @@ export class Room{
         );
 
         mesh.rotation.x = -Math.PI/2;
+
+        mesh.position.set(this.width/2,0,this.depth/2);
 
         mesh.receiveShadow = true;
 
@@ -84,7 +84,7 @@ export class Room{
 
         this.ceiling.rotation.x = Math.PI/2;
 
-        this.ceiling.position.y = this.height;
+        this.ceiling.position.set(this.width/2,this.height,this.depth/2);
 
         this.ceiling.receiveShadow = true;
 
@@ -92,45 +92,9 @@ export class Room{
 
     }
 
-    buildNorthWall(){
+    buildBackWall(){
 
-        this.northWall = new THREE.Mesh(
-
-            new THREE.BoxGeometry(
-
-                this.width,
-
-                this.height,
-
-                this.wallThickness
-
-            ),
-
-            this.wallMaterial()
-
-        );
-
-        this.northWall.position.set(
-
-            0,
-
-            this.height/2,
-
-            -this.depth/2
-
-        );
-
-        this.northWall.castShadow = true;
-
-        this.northWall.receiveShadow = true;
-
-        this.group.add(this.northWall);
-
-    }
-
-    buildSouthWall(){
-
-        this.southWall = new THREE.Mesh(
+        this.backWall = new THREE.Mesh(
 
             new THREE.BoxGeometry(
 
@@ -146,43 +110,7 @@ export class Room{
 
         );
 
-        this.southWall.position.set(
-
-            0,
-
-            this.height/2,
-
-            this.depth/2
-
-        );
-
-        this.southWall.castShadow = true;
-
-        this.southWall.receiveShadow = true;
-
-        this.group.add(this.southWall);
-
-    }
-
-    buildEastWall(){
-
-        this.eastWall = new THREE.Mesh(
-
-            new THREE.BoxGeometry(
-
-                this.wallThickness,
-
-                this.height,
-
-                this.depth
-
-            ),
-
-            this.wallMaterial()
-
-        );
-
-        this.eastWall.position.set(
+        this.backWall.position.set(
 
             this.width/2,
 
@@ -192,17 +120,17 @@ export class Room{
 
         );
 
-        this.eastWall.castShadow = true;
+        this.backWall.castShadow = true;
 
-        this.eastWall.receiveShadow = true;
+        this.backWall.receiveShadow = true;
 
-        this.group.add(this.eastWall);
+        this.group.add(this.backWall);
 
     }
 
-    buildWestWall(){
+    buildLeftWall(){
 
-        this.westWall = new THREE.Mesh(
+        this.leftWall = new THREE.Mesh(
 
             new THREE.BoxGeometry(
 
@@ -218,21 +146,57 @@ export class Room{
 
         );
 
-        this.westWall.position.set(
+        this.leftWall.position.set(
 
-            -this.width/2,
+            0,
 
             this.height/2,
 
-            0
+            this.depth/2
 
         );
 
-        this.westWall.castShadow = true;
+        this.leftWall.castShadow = true;
 
-        this.westWall.receiveShadow = true;
+        this.leftWall.receiveShadow = true;
 
-        this.group.add(this.westWall);
+        this.group.add(this.leftWall);
+
+    }
+
+    buildRightWall(){
+
+        this.rightWall = new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+                this.wallThickness,
+
+                this.height,
+
+                this.depth
+
+            ),
+
+            this.wallMaterial()
+
+        );
+
+        this.rightWall.position.set(
+
+            this.width,
+
+            this.height/2,
+
+            this.depth/2
+
+        );
+
+        this.rightWall.castShadow = true;
+
+        this.rightWall.receiveShadow = true;
+
+        this.group.add(this.rightWall);
 
     }
 
@@ -244,7 +208,7 @@ export class Room{
 
         const material = this.materials.get("graphite");
 
-        const north = new THREE.Mesh(
+        const back = new THREE.Mesh(
 
             new THREE.BoxGeometry(
 
@@ -260,25 +224,19 @@ export class Room{
 
         );
 
-        north.position.set(
+        back.position.set(
 
-            0,
+            this.width/2,
 
             h/2,
 
-            -this.depth/2
+            0
 
         );
 
-        this.group.add(north);
+        this.group.add(back);
 
-        const south = north.clone();
-
-        south.position.z = this.depth/2;
-
-        this.group.add(south);
-
-        const west = new THREE.Mesh(
+        const left = new THREE.Mesh(
 
             new THREE.BoxGeometry(
 
@@ -294,23 +252,23 @@ export class Room{
 
         );
 
-        west.position.set(
+        left.position.set(
 
-            -this.width/2,
+            0,
 
             h/2,
 
-            0
+            this.depth/2
 
         );
 
-        this.group.add(west);
+        this.group.add(left);
 
-        const east = west.clone();
+        const right = left.clone();
 
-        east.position.x = this.width/2;
+        right.position.x = this.width;
 
-        this.group.add(east);
+        this.group.add(right);
 
     }
 

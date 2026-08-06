@@ -72,7 +72,7 @@ export class SceneManager {
 
         this.controls.dampingFactor = .05;
 
-        this.setView("kitchen");
+        this.setView("iso");
 
         this.createEnvironment();
 
@@ -190,41 +190,55 @@ export class SceneManager {
 
     setView(name){
 
-        switch(name){
+        const fixed={
 
-            case "iso":
+            top:{position:[2.475,10,2.0001],target:[2.475,0,2.0]},
 
-                this.camera.position.set(6,5,6);
+            sink:{position:[3.6,1.6,1.5],target:[4.6,1.0,2.0]},
 
-                break;
+            pantry:{position:[4.0,1.4,3.6],target:[3.9,1.1,2.9]}
 
-            case "top":
+        };
 
-                this.camera.position.set(0,10,0.001);
+        if(fixed[name]){
 
-                break;
+            const f=fixed[name];
 
-            case "front":
+            this.camera.position.set(f.position[0],f.position[1],f.position[2]);
 
-                this.camera.position.set(0,1.7,7);
+            this.controls.target.set(f.target[0],f.target[1],f.target[2]);
 
-                break;
-
-            case "kitchen":
-
-                this.camera.position.set(2.0,1.7,1.6);
-
-                break;
+            return;
 
         }
 
+        const presets={
+
+            iso:{theta:0.9,phi:1.05,radius:9.5,target:[2.475,1.1,2.0]},
+
+            stove:{theta:0.0,phi:1.2,radius:4.5,target:[1.2,1.0,0.3]},
+
+            island:{theta:0.6,phi:1.1,radius:4.2,target:[1.75,0.9,2.4]}
+
+        };
+
+        const p=presets[name]??presets.iso;
+
+        const x=p.target[0]+p.radius*Math.sin(p.phi)*Math.sin(p.theta);
+
+        const y=p.target[1]+p.radius*Math.cos(p.phi);
+
+        const z=p.target[2]+p.radius*Math.sin(p.phi)*Math.cos(p.theta);
+
+        this.camera.position.set(x,y,z);
+
         this.controls.target.set(
 
-            0,
+            p.target[0],
 
-            1,
+            p.target[1],
 
-            0
+            p.target[2]
 
         );
 
