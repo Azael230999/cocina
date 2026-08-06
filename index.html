@@ -35,6 +35,53 @@
       #view-toolbar button:hover {
         background: #fff;
       }
+      #material-panel {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        width: 220px;
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 10px;
+        padding: 14px;
+        font-family: sans-serif;
+        z-index: 10;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      }
+      #material-panel h2 {
+        font-size: 13px;
+        margin: 0 0 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #444;
+      }
+      .material-category {
+        margin-bottom: 14px;
+      }
+      .material-category h3 {
+        font-size: 12px;
+        margin: 0 0 6px;
+        color: #666;
+        font-weight: 600;
+      }
+      .swatch-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .swatch {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        padding: 0;
+      }
+      .swatch.active {
+        border-color: #b5714a;
+        box-shadow: 0 0 0 2px rgba(181, 113, 74, 0.35);
+      }
     </style>
   </head>
   <body>
@@ -46,6 +93,9 @@
       <button data-view="sink">Muro tarja</button>
       <button data-view="pantry">Alacena</button>
       <button data-view="island">Isla</button>
+    </div>
+    <div id="material-panel">
+      <h2>Materiales</h2>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

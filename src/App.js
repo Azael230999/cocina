@@ -6,6 +6,7 @@ import {RightWallRun} from "./kitchen/RightWallRun.js";
 import {Pantry} from "./kitchen/Pantry.js";
 import {Window} from "./kitchen/Window.js";
 import {MaterialManager} from "./core/MaterialManager.js";
+import {MaterialPanel} from "./core/MaterialPanel.js";
 
 export class App{
 
@@ -48,6 +49,8 @@ export class App{
         this.scene.add(window_.group);
 
         this.bindViewButtons();
+
+        this.materialPanel=new MaterialPanel(materials);
 
     }
 

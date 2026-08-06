@@ -40,13 +40,7 @@ export class Room{
 
             ),
 
-            new THREE.MeshStandardMaterial({
-
-                color:"#ddd4c5",
-
-                roughness:.95
-
-            })
+            this.materials.get("floor")
 
         );
 
@@ -106,7 +100,7 @@ export class Room{
 
             ),
 
-            this.wallMaterial()
+            this.materials.get("wall")
 
         );
 
@@ -142,7 +136,7 @@ export class Room{
 
             ),
 
-            this.wallMaterial()
+            this.materials.get("wall")
 
         );
 
@@ -178,7 +172,7 @@ export class Room{
 
             ),
 
-            this.wallMaterial()
+            this.materials.get("wall")
 
         );
 
@@ -269,22 +263,6 @@ export class Room{
         right.position.x = this.width;
 
         this.group.add(right);
-
-    }
-
-    wallMaterial(){
-
-        if(!this._wallMaterial){
-
-            this._wallMaterial = new THREE.MeshStandardMaterial({
-
-                color:"#f7f4ef"
-
-            });
-
-        }
-
-        return this._wallMaterial;
 
     }
 
