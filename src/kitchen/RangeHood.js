@@ -8,6 +8,12 @@ export class RangeHood{
 
         this.build();
 
+        this.group.userData.selectable=true;
+
+        this.group.userData.kind="appliance";
+
+        this.group.userData.label="Campana";
+
     }
 
     build(){

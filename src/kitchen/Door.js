@@ -34,6 +34,12 @@ export class Door{
 
         this.group.add(leaf);
 
+        this.group.userData.selectable=true;
+
+        this.group.userData.kind="fixture";
+
+        this.group.userData.label="Puerta";
+
     }
 
 }

@@ -30,7 +30,7 @@ export class Room{
 
     buildFloor(){
 
-        const mesh = new THREE.Mesh(
+        this.floorMesh = new THREE.Mesh(
 
             new THREE.PlaneGeometry(
 
@@ -44,13 +44,13 @@ export class Room{
 
         );
 
-        mesh.rotation.x = -Math.PI/2;
+        this.floorMesh.rotation.x = -Math.PI/2;
 
-        mesh.position.set(this.width/2,0,this.depth/2);
+        this.floorMesh.position.set(this.width/2,0,this.depth/2);
 
-        mesh.receiveShadow = true;
+        this.floorMesh.receiveShadow = true;
 
-        this.group.add(mesh);
+        this.group.add(this.floorMesh);
 
     }
 

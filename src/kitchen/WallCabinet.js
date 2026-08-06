@@ -19,6 +19,12 @@ export class WallCabinet{
 
         this.build();
 
+        this.group.userData.selectable=true;
+
+        this.group.userData.kind="cabinet";
+
+        this.group.userData.label="Gabinete alto";
+
     }
 
     build(){

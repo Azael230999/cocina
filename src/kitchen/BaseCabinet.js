@@ -25,6 +25,58 @@ export class BaseCabinet{
 
         this.build();
 
+        this.tagEditable();
+
+    }
+
+    tagEditable(){
+
+        this.group.userData.selectable=true;
+
+        this.group.userData.kind="cabinet";
+
+        this.group.userData.label="Gabinete";
+
+        this.group.userData.cycleDrawers=()=>{
+
+            const nextDrawers=this.drawers>=4?2:this.drawers+1;
+
+            const replacement=new BaseCabinet(
+
+                this.materials,
+
+                {
+
+                    width:this.width,
+
+                    depth:this.depth,
+
+                    height:this.height,
+
+                    drawers:nextDrawers
+
+                }
+
+            );
+
+            replacement.group.position.copy(this.group.position);
+
+            replacement.group.rotation.copy(this.group.rotation);
+
+            const parent=this.group.parent;
+
+            if(parent){
+
+                parent.remove(this.group);
+
+                parent.add(replacement.group);
+
+            }
+
+            return replacement.group;
+
+        };
+
     }
 
     build(){

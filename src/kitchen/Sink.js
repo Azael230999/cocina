@@ -26,6 +26,12 @@ export class Sink{
 
         this.group.add(bowl);
 
+        this.group.userData.selectable=true;
+
+        this.group.userData.kind="fixture";
+
+        this.group.userData.label="Fregadero";
+
     }
 
 }

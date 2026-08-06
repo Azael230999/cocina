@@ -42,6 +42,12 @@ export class Faucet{
 
         this.group.add(neck);
 
+        this.group.userData.selectable=true;
+
+        this.group.userData.kind="fixture";
+
+        this.group.userData.label="Llave";
+
     }
 
 }

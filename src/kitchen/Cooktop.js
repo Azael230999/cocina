@@ -36,6 +36,12 @@ export class Cooktop{
 
         this.group.add(top);
 
+        this.group.userData.selectable=true;
+
+        this.group.userData.kind="appliance";
+
+        this.group.userData.label="Cooktop";
+
     }
 
 }

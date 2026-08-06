@@ -7,6 +7,8 @@ import {Pantry} from "./kitchen/Pantry.js";
 import {Window} from "./kitchen/Window.js";
 import {MaterialManager} from "./core/MaterialManager.js";
 import {MaterialPanel} from "./core/MaterialPanel.js";
+import {EditorController} from "./core/EditorController.js";
+import {CatalogPanel} from "./core/CatalogPanel.js";
 
 export class App{
 
@@ -51,6 +53,10 @@ export class App{
         this.bindViewButtons();
 
         this.materialPanel=new MaterialPanel(materials);
+
+        this.editor=new EditorController(this.scene,this.room);
+
+        this.catalog=new CatalogPanel(materials,this.editor);
 
     }
 
