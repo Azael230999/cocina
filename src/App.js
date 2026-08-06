@@ -9,6 +9,8 @@ import {MaterialManager} from "./core/MaterialManager.js";
 import {MaterialPanel} from "./core/MaterialPanel.js";
 import {EditorController} from "./core/EditorController.js";
 import {CatalogPanel} from "./core/CatalogPanel.js";
+import {PersistenceManager} from "./core/PersistenceManager.js";
+import {SessionPanel} from "./core/SessionPanel.js";
 
 export class App{
 
@@ -52,11 +54,17 @@ export class App{
 
         this.bindViewButtons();
 
-        this.materialPanel=new MaterialPanel(materials);
-
         this.editor=new EditorController(this.scene,this.room);
 
+        this.persistence=new PersistenceManager(materials,this.scene,this.editor);
+
+        this.persistence.load();
+
+        this.materialPanel=new MaterialPanel(materials);
+
         this.catalog=new CatalogPanel(materials,this.editor);
+
+        this.sessionPanel=new SessionPanel(this.persistence,this.scene);
 
     }
 

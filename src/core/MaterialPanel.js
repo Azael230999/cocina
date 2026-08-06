@@ -30,13 +30,15 @@ export class MaterialPanel{
 
             row.className="swatch-row";
 
+            const currentHex=this.materials.get(category.role).color.getHexString();
+
             category.swatches.forEach((swatch,index)=>{
 
                 const button=document.createElement("button");
 
                 button.className="swatch";
 
-                if(index===0){
+                if(swatch.hex.replace("#","").toLowerCase()===currentHex){
 
                     button.classList.add("active");
 

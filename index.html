@@ -140,6 +140,27 @@
         background: #e2554a;
         color: #fff;
       }
+      #session-toolbar {
+        position: fixed;
+        top: 60px;
+        left: 16px;
+        display: flex;
+        gap: 8px;
+        font-family: sans-serif;
+        z-index: 10;
+      }
+      #session-toolbar button {
+        padding: 6px 14px;
+        border: none;
+        border-radius: 6px;
+        background: rgba(74, 144, 217, 0.9);
+        color: #fff;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      #session-toolbar button:hover {
+        background: rgba(58, 122, 191, 0.95);
+      }
       #placement-hint {
         position: fixed;
         top: 16px;
@@ -169,6 +190,7 @@
     <div id="material-panel">
       <h2>Materiales</h2>
     </div>
+    <div id="session-toolbar"></div>
     <div id="catalog-panel"></div>
     <div id="editor-panel"></div>
     <div id="placement-hint"></div>

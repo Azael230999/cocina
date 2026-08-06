@@ -22,6 +22,8 @@ export class EditorController{
 
         this.moveArmed=false;
 
+        this.placedProps=[];
+
         this.downPos=null;
 
         this.panel=document.getElementById("editor-panel");
@@ -234,9 +236,17 @@ export class EditorController{
 
         }
 
+        this.placedProps=this.placedProps.filter(p=>p.group!==this.selected);
+
         this.selected=null;
 
         this.updatePanel();
+
+    }
+
+    registerPlaced(type,group){
+
+        this.placedProps.push({type,group});
 
     }
 
@@ -333,6 +343,8 @@ export class EditorController{
             instance.group.position.copy(hit.point);
 
             this.sceneManager.add(instance.group);
+
+            this.registerPlaced(this.placementLabel,instance.group);
 
             this.cancelPlacement();
 

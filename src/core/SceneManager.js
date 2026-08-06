@@ -30,7 +30,9 @@ export class SceneManager {
 
             antialias:true,
 
-            powerPreference:"high-performance"
+            powerPreference:"high-performance",
+
+            preserveDrawingBuffer:true
 
         });
 
