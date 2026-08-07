@@ -2,7 +2,7 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Cocina 3D</title>
     <style>
       html, body {
@@ -10,10 +10,19 @@
         padding: 0;
         height: 100%;
         overflow: hidden;
+        overscroll-behavior: none;
+        -webkit-text-size-adjust: 100%;
+      }
+      button {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        user-select: none;
       }
       #viewport {
         width: 100vw;
         height: 100vh;
+        height: 100dvh;
+        touch-action: none;
       }
       #view-toolbar {
         position: fixed;
@@ -35,26 +44,59 @@
       #view-toolbar button:hover {
         background: #fff;
       }
+      #material-toggle {
+        display: none;
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 15;
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.92);
+        font-size: 20px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      }
       #material-panel {
         position: fixed;
         top: 16px;
         right: 16px;
         width: 220px;
         max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
         overflow-y: auto;
         background: rgba(255, 255, 255, 0.92);
         border-radius: 10px;
         padding: 14px;
         font-family: sans-serif;
-        z-index: 10;
+        z-index: 16;
         box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
       }
       #material-panel h2 {
         font-size: 13px;
-        margin: 0 0 12px;
+        margin: 0;
         letter-spacing: 0.04em;
         text-transform: uppercase;
         color: #444;
+      }
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      #material-close {
+        display: none;
+        border: none;
+        background: #eee;
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
       }
       .material-category {
         margin-bottom: 14px;
@@ -175,6 +217,110 @@
         font-size: 13px;
         z-index: 20;
       }
+
+      @media (max-width: 820px) {
+        #view-toolbar {
+          top: max(12px, env(safe-area-inset-top));
+          left: 12px;
+          right: 12px;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding-bottom: 2px;
+        }
+        #view-toolbar::-webkit-scrollbar {
+          display: none;
+        }
+        #view-toolbar button {
+          flex: 0 0 auto;
+          font-size: 12px;
+          padding: 9px 12px;
+        }
+
+        #session-toolbar {
+          top: max(64px, calc(env(safe-area-inset-top) + 64px));
+          left: 12px;
+          right: 12px;
+          justify-content: flex-end;
+        }
+        #session-toolbar button {
+          font-size: 12px;
+          padding: 8px 12px;
+        }
+
+        #material-toggle {
+          display: block;
+          top: max(16px, env(safe-area-inset-top));
+        }
+
+        #material-panel {
+          top: auto;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          width: auto;
+          max-width: none;
+          max-height: 65vh;
+          border-radius: 16px 16px 0 0;
+          transform: translateY(110%);
+          transition: transform 0.25s ease;
+          padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+          box-sizing: border-box;
+        }
+        #material-panel.open {
+          transform: translateY(0);
+        }
+        #material-close {
+          display: block;
+        }
+        .swatch {
+          width: 32px;
+          height: 32px;
+        }
+
+        #catalog-panel {
+          left: 0;
+          right: 0;
+          bottom: 0;
+          top: auto;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          width: 100%;
+          box-sizing: border-box;
+          padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+          background: linear-gradient(to top, rgba(245, 242, 236, 0.95), rgba(245, 242, 236, 0));
+          scrollbar-width: none;
+        }
+        #catalog-panel::-webkit-scrollbar {
+          display: none;
+        }
+        #catalog-panel button {
+          flex: 0 0 auto;
+          white-space: nowrap;
+          padding: 10px 14px;
+        }
+
+        #editor-panel {
+          left: 12px;
+          right: 12px;
+          bottom: max(72px, calc(72px + env(safe-area-inset-bottom)));
+          width: auto;
+          min-width: 0;
+        }
+        .editor-actions button {
+          padding: 9px 12px;
+          font-size: 13px;
+        }
+
+        #placement-hint {
+          top: 64px;
+          max-width: 88%;
+          white-space: normal;
+          text-align: center;
+        }
+      }
     </style>
   </head>
   <body>
@@ -187,8 +333,12 @@
       <button data-view="pantry">Alacena</button>
       <button data-view="island">Isla</button>
     </div>
+    <button id="material-toggle" aria-label="Materiales">🎨</button>
     <div id="material-panel">
-      <h2>Materiales</h2>
+      <div class="panel-header">
+        <h2>Materiales</h2>
+        <button id="material-close" aria-label="Cerrar">✕</button>
+      </div>
     </div>
     <div id="session-toolbar"></div>
     <div id="catalog-panel"></div>

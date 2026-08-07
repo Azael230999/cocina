@@ -60,6 +60,8 @@ export class SceneManager {
 
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+        this.renderer.domElement.style.touchAction = "none";
+
         container.appendChild(this.renderer.domElement);
 
         this.controls = new OrbitControls(
