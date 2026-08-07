@@ -6,6 +6,7 @@ import {SpiceRack} from "../kitchen/SpiceRack.js";
 import {Microwave} from "../kitchen/Microwave.js";
 import {CoffeeMaker} from "../kitchen/CoffeeMaker.js";
 import {Vase} from "../kitchen/Vase.js";
+import {Shelf} from "../kitchen/Shelf.js";
 
 export class CatalogPanel{
 
@@ -33,7 +34,9 @@ export class CatalogPanel{
 
             {label:"Microondas",factory:()=>new Microwave()},
 
-            {label:"Cafetera",factory:()=>new CoffeeMaker()}
+            {label:"Cafetera",factory:()=>new CoffeeMaker()},
+
+            {label:"Repisa",factory:()=>new Shelf(this.materials)}
 
         ];
 
