@@ -6,6 +6,8 @@ import {Vase} from "../kitchen/Vase.js";
 import {SpiceRack} from "../kitchen/SpiceRack.js";
 import {Microwave} from "../kitchen/Microwave.js";
 import {CoffeeMaker} from "../kitchen/CoffeeMaker.js";
+import {Shelf} from "../kitchen/Shelf.js";
+import {Refrigerator} from "../kitchen/Refrigerator.js";
 
 const FACTORIES={
 
@@ -23,7 +25,11 @@ const FACTORIES={
 
     "Microondas":()=>new Microwave(),
 
-    "Cafetera":()=>new CoffeeMaker()
+    "Cafetera":()=>new CoffeeMaker(),
+
+    "Repisa":(materials)=>new Shelf(materials),
+
+    "Refrigerador":(materials)=>new Refrigerator(materials)
 
 };
 

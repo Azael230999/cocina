@@ -66,6 +66,36 @@ export class App{
 
         this.sessionPanel=new SessionPanel(this.persistence,this.scene);
 
+        this.bindMaterialToggle();
+
+    }
+
+    bindMaterialToggle(){
+
+        const toggle=document.getElementById("material-toggle");
+
+        const panel=document.getElementById("material-panel");
+
+        const close=document.getElementById("material-close");
+
+        if(!toggle||!panel){
+
+            return;
+
+        }
+
+        toggle.addEventListener("click",()=>{
+
+            panel.classList.toggle("open");
+
+        });
+
+        if(close){
+
+            close.addEventListener("click",()=>panel.classList.remove("open"));
+
+        }
+
     }
 
     bindViewButtons(){
