@@ -120,6 +120,8 @@ export class Room{
 
         this.backWall.receiveShadow = true;
 
+        this.backWall.userData.isSurface = true;
+
         this.group.add(this.backWall);
 
     }
@@ -156,6 +158,8 @@ export class Room{
 
         this.leftWall.receiveShadow = true;
 
+        this.leftWall.userData.isSurface = true;
+
         this.group.add(this.leftWall);
 
     }
@@ -191,6 +195,8 @@ export class Room{
         this.rightWall.castShadow = true;
 
         this.rightWall.receiveShadow = true;
+
+        this.rightWall.userData.isSurface = true;
 
         this.group.add(this.rightWall);
 

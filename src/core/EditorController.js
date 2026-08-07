@@ -342,6 +342,8 @@ export class EditorController{
 
             instance.group.position.copy(hit.point);
 
+            this.alignToSurface(instance.group,hit);
+
             this.sceneManager.add(instance.group);
 
             this.registerPlaced(this.placementLabel,instance.group);
@@ -360,15 +362,39 @@ export class EditorController{
 
         if(hit&&this.selected){
 
-            this.selected.position.x=hit.point.x;
+            this.selected.position.copy(hit.point);
 
-            this.selected.position.z=hit.point.z;
+            this.alignToSurface(this.selected,hit);
 
             this.cancelMove();
 
             this.updatePanel();
 
         }
+
+    }
+
+    alignToSurface(group,hit){
+
+        if(!hit.face){
+
+            return;
+
+        }
+
+        const normal=hit.face.normal.clone()
+
+            .transformDirection(hit.object.matrixWorld)
+
+            .normalize();
+
+        if(Math.abs(normal.y)>0.5){
+
+            return;
+
+        }
+
+        group.rotation.y=Math.atan2(normal.x,normal.z);
 
     }
 

@@ -12,7 +12,7 @@ export class Shelf{
 
         this.depth=.22;
 
-        this.mountHeight=1.30;
+        this.mountHeight=0;
 
         this.build();
 
@@ -46,7 +46,7 @@ export class Shelf{
 
         );
 
-        plank.position.y=this.mountHeight;
+        plank.position.set(0,this.mountHeight,this.depth/2);
 
         plank.castShadow=true;
 
@@ -70,7 +70,7 @@ export class Shelf{
 
             );
 
-            bracket.position.set(sign*(this.width/2-.08),this.mountHeight-.01,0);
+            bracket.position.set(sign*(this.width/2-.08),this.mountHeight-.01,this.depth/2);
 
             this.group.add(bracket);
 
@@ -88,7 +88,7 @@ export class Shelf{
 
                 this.mountHeight-.10,
 
-                -this.depth/2+.02
+                .02
 
             );
 
@@ -118,7 +118,7 @@ export class Shelf{
 
                 this.mountHeight+.11,
 
-                0
+                this.depth/2
 
             );
 
@@ -146,7 +146,7 @@ export class Shelf{
 
         );
 
-        jar.position.set(this.width/2-.15,this.mountHeight+.08,0);
+        jar.position.set(this.width/2-.15,this.mountHeight+.08,this.depth/2);
 
         jar.castShadow=true;
 
