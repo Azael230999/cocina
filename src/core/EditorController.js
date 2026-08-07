@@ -26,6 +26,10 @@ export class EditorController{
 
         this.downPos=null;
 
+        this.dragCandidate=null;
+
+        this.dragging=null;
+
         this.panel=document.getElementById("editor-panel");
 
         this.hint=document.getElementById("placement-hint");
@@ -42,9 +46,11 @@ export class EditorController{
 
             this.downPos={x:e.clientX,y:e.clientY};
 
+            this.dragCandidate=this.findDragCandidate(e);
+
         });
 
-        dom.addEventListener("pointerup",(e)=>{
+        dom.addEventListener("pointermove",(e)=>{
 
             if(!this.downPos){
 
@@ -55,6 +61,80 @@ export class EditorController{
             const dx=e.clientX-this.downPos.x;
 
             const dy=e.clientY-this.downPos.y;
+
+            if(!this.dragging){
+
+                if(!this.dragCandidate||Math.hypot(dx,dy)<=5){
+
+                    return;
+
+                }
+
+                this.dragging=this.dragCandidate;
+
+                this.sceneManager.controls.enabled=false;
+
+                if(this.selected!==this.dragging){
+
+                    this.select(this.dragging);
+
+                }
+
+                this.hint.textContent=`Moviendo: ${this.dragging.userData.label||"objeto"}`;
+
+                this.hint.style.display="block";
+
+            }
+
+            this.updatePointer(e);
+
+            const hit=this.findSurfaceHit(this.dragging);
+
+            if(hit){
+
+                this.dragging.position.copy(hit.point);
+
+                this.alignToSurface(this.dragging,hit);
+
+            }
+
+        });
+
+        dom.addEventListener("pointerup",(e)=>{
+
+            const wasDragging=!!this.dragging;
+
+            if(this.dragging){
+
+                this.sceneManager.controls.enabled=true;
+
+                this.dragging=null;
+
+                this.hint.style.display="none";
+
+                this.updatePanel();
+
+            }
+
+            this.dragCandidate=null;
+
+            if(!this.downPos){
+
+                return;
+
+            }
+
+            const dx=e.clientX-this.downPos.x;
+
+            const dy=e.clientY-this.downPos.y;
+
+            this.downPos=null;
+
+            if(wasDragging){
+
+                return;
+
+            }
 
             if(Math.hypot(dx,dy)>5){
 
@@ -77,6 +157,36 @@ export class EditorController{
             }
 
         });
+
+    }
+
+    findDragCandidate(e){
+
+        if(this.placementFactory||this.moveArmed){
+
+            return null;
+
+        }
+
+        this.updatePointer(e);
+
+        this.raycaster.setFromCamera(this.pointer,this.sceneManager.camera);
+
+        const hits=this.raycaster.intersectObjects(this.sceneManager.scene.children,true);
+
+        for(const hit of hits){
+
+            const target=this.findSelectable(hit.object);
+
+            if(target){
+
+                return target.userData.movable?target:null;
+
+            }
+
+        }
+
+        return null;
 
     }
 
@@ -152,13 +262,69 @@ export class EditorController{
 
     }
 
-    findSurfaceHit(){
+    findSurfaceHit(exclude){
 
         this.raycaster.setFromCamera(this.pointer,this.sceneManager.camera);
 
         const hits=this.raycaster.intersectObjects(this.sceneManager.scene.children,true);
 
-        return hits.find(hit=>hit.object.userData&&hit.object.userData.isSurface);
+        return hits.find(hit=>{
+
+            const data=hit.object.userData;
+
+            if(!data||!data.isSurface){
+
+                return false;
+
+            }
+
+            if(exclude&&this.isDescendantOf(hit.object,exclude)){
+
+                return false;
+
+            }
+
+            if(!data.surfaceOrientation||!hit.face){
+
+                return true;
+
+            }
+
+            const isVertical=Math.abs(this.worldNormal(hit).y)<=0.5;
+
+            return data.surfaceOrientation==="vertical"?isVertical:!isVertical;
+
+        });
+
+    }
+
+    worldNormal(hit){
+
+        return hit.face.normal.clone()
+
+            .transformDirection(hit.object.matrixWorld)
+
+            .normalize();
+
+    }
+
+    isDescendantOf(object,ancestor){
+
+        let current=object;
+
+        while(current){
+
+            if(current===ancestor){
+
+                return true;
+
+            }
+
+            current=current.parent;
+
+        }
+
+        return false;
 
     }
 
@@ -358,7 +524,7 @@ export class EditorController{
 
     tryMove(){
 
-        const hit=this.findSurfaceHit();
+        const hit=this.findSurfaceHit(this.selected);
 
         if(hit&&this.selected){
 
@@ -382,11 +548,7 @@ export class EditorController{
 
         }
 
-        const normal=hit.face.normal.clone()
-
-            .transformDirection(hit.object.matrixWorld)
-
-            .normalize();
+        const normal=this.worldNormal(hit);
 
         if(Math.abs(normal.y)>0.5){
 

@@ -21,6 +21,8 @@ export class Countertop {
 
         this.mesh.userData.isSurface = true;
 
+        this.mesh.userData.surfaceOrientation = "horizontal";
+
     }
 
 }

@@ -52,6 +52,8 @@ export class Room{
 
         this.floorMesh.userData.isSurface = true;
 
+        this.floorMesh.userData.surfaceOrientation = "horizontal";
+
         this.group.add(this.floorMesh);
 
     }
@@ -122,6 +124,8 @@ export class Room{
 
         this.backWall.userData.isSurface = true;
 
+        this.backWall.userData.surfaceOrientation = "vertical";
+
         this.group.add(this.backWall);
 
     }
@@ -160,6 +164,8 @@ export class Room{
 
         this.leftWall.userData.isSurface = true;
 
+        this.leftWall.userData.surfaceOrientation = "vertical";
+
         this.group.add(this.leftWall);
 
     }
@@ -197,6 +203,8 @@ export class Room{
         this.rightWall.receiveShadow = true;
 
         this.rightWall.userData.isSurface = true;
+
+        this.rightWall.userData.surfaceOrientation = "vertical";
 
         this.group.add(this.rightWall);
 
