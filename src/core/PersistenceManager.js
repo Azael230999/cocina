@@ -8,6 +8,8 @@ import {Microwave} from "../kitchen/Microwave.js";
 import {CoffeeMaker} from "../kitchen/CoffeeMaker.js";
 import {Shelf} from "../kitchen/Shelf.js";
 import {Refrigerator} from "../kitchen/Refrigerator.js";
+import {BaseCabinet} from "../kitchen/BaseCabinet.js";
+import {makeWallCabinetProp} from "./WallCabinetProp.js";
 
 const FACTORIES={
 
@@ -29,7 +31,11 @@ const FACTORIES={
 
     "Repisa":(materials)=>new Shelf(materials),
 
-    "Refrigerador":(materials)=>new Refrigerator(materials)
+    "Refrigerador":(materials)=>new Refrigerator(materials),
+
+    "Gabinete":(materials)=>new BaseCabinet(materials),
+
+    "Gabinete alto":(materials)=>makeWallCabinetProp(materials)
 
 };
 

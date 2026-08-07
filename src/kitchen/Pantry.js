@@ -8,17 +8,35 @@ export class Pantry{
 
         this.materials=materials;
 
-        this.wallX=options.wallX??3.20;
+        const wallX=options.wallX??3.20;
 
-        this.wallZ1=options.wallZ1??1.90;
+        const wallZ1=options.wallZ1??1.90;
 
-        this.wallZ2=options.wallZ2??3.90;
+        const wallZ2=options.wallZ2??3.90;
+
+        this.length=wallZ2-wallZ1;
 
         this.height=options.height??2.40;
 
         this.thickness=.10;
 
         this.build();
+
+        this.group.position.set(wallX,0,(wallZ1+wallZ2)/2);
+
+        this.tagEditable();
+
+    }
+
+    tagEditable(){
+
+        this.group.userData.selectable=true;
+
+        this.group.userData.movable=true;
+
+        this.group.userData.kind="fixture";
+
+        this.group.userData.label="Alacena";
 
     }
 
@@ -34,11 +52,9 @@ export class Pantry{
 
     buildWall(){
 
-        const length=this.wallZ2-this.wallZ1;
-
         const wall=new THREE.Mesh(
 
-            new THREE.BoxGeometry(this.thickness,this.height,length),
+            new THREE.BoxGeometry(this.thickness,this.height,this.length),
 
             new THREE.MeshStandardMaterial({
 
@@ -50,15 +66,7 @@ export class Pantry{
 
         );
 
-        wall.position.set(
-
-            this.wallX,
-
-            this.height/2,
-
-            this.wallZ1+length/2
-
-        );
+        wall.position.set(0,this.height/2,0);
 
         wall.castShadow=true;
 
@@ -69,8 +77,6 @@ export class Pantry{
     }
 
     buildShelves(){
-
-        const length=this.wallZ2-this.wallZ1;
 
         const shelfDepth=.30;
 
@@ -86,7 +92,7 @@ export class Pantry{
 
             const shelf=new THREE.Mesh(
 
-                new THREE.BoxGeometry(shelfDepth,.03,length-.4),
+                new THREE.BoxGeometry(shelfDepth,.03,this.length-.4),
 
                 material
 
@@ -94,11 +100,11 @@ export class Pantry{
 
             shelf.position.set(
 
-                this.wallX+this.thickness/2+shelfDepth/2,
+                this.thickness/2+shelfDepth/2,
 
                 y,
 
-                this.wallZ1+length/2
+                0
 
             );
 
@@ -140,11 +146,11 @@ export class Pantry{
 
                 jar.position.set(
 
-                    this.wallX+this.thickness/2+.15,
+                    this.thickness/2+.15,
 
                     y+.10,
 
-                    this.wallZ1+.6+j*.35
+                    -this.length/2+.6+j*.35
 
                 );
 

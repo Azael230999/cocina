@@ -8,6 +8,8 @@ import {CoffeeMaker} from "../kitchen/CoffeeMaker.js";
 import {Vase} from "../kitchen/Vase.js";
 import {Shelf} from "../kitchen/Shelf.js";
 import {Refrigerator} from "../kitchen/Refrigerator.js";
+import {BaseCabinet} from "../kitchen/BaseCabinet.js";
+import {makeWallCabinetProp} from "./WallCabinetProp.js";
 
 export class CatalogPanel{
 
@@ -39,7 +41,11 @@ export class CatalogPanel{
 
             {label:"Repisa",factory:()=>new Shelf(this.materials)},
 
-            {label:"Refrigerador",factory:()=>new Refrigerator(this.materials)}
+            {label:"Refrigerador",factory:()=>new Refrigerator(this.materials)},
+
+            {label:"Gabinete",factory:()=>new BaseCabinet(this.materials)},
+
+            {label:"Gabinete alto",factory:()=>makeWallCabinetProp(this.materials)}
 
         ];
 
